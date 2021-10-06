@@ -1,4 +1,8 @@
 pipeline {
+  
+  environment {
+  registryCredential = '2'
+  }
 
   agent any
 
@@ -21,10 +25,11 @@ pipeline {
       stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                            myapp.push("latest")
-                            myapp.push("${env.BUILD_ID}")
-                    }
+                  docker.withRegistry( '', registryCredential ) 
+                  {
+                    dockerImage.push("$BUILD_NUMBER")
+                    dockerImage.push('latest')
+                  }
                 }
             }
         }
